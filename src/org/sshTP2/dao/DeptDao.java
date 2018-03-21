@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.sshTP2.pojo.Dept;
-
+//ÄãºÃ
 @Repository
 public class DeptDao {
 	
