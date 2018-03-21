@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+		
+		<!-- 3-1.扫描jdbc文件 -->
+		<context:property-placeholder location="classpath:org/sshTP2/cnf/jdbc.properties"/>
+		<!-- 3-2.配置数据库连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"></property>
+		<property name="url" value="${jdbc.url}"></property>
+		<property name="username" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		</bean>
+		<!-- 4.hibernate核心对象(SessionFactory) -->
+		<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="hibernateProperties">
+		<props>
+		<!-- 数据库方言 -->
+		<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+		<!-- 自动建表 -->
+		<prop key="hibernate.hbm2ddl.auto">update</prop>
+		</props>
+		</property>
+		<property name="packagesToScan" value="org.sshTP2.pojo"></property>
+		</bean>
+		<!-- 5.事务管理器 -->
+		<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+		</bean>
+		<!--6.开启事务注解  -->
+		<tx:annotation-driven/>
+		<!-- 7.扫描对象 -->
+		<context:component-scan base-package="org.sshTP2.dao,org.sshTP2.service"></context:component-scan>
+</beans>
